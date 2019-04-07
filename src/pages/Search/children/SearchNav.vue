@@ -1,6 +1,6 @@
 <template>
   <div class="search-nav">
-    <a href="" class="search-nav-icon">
+    <a href="" class="search-nav-icon" @click.prevent="isShowSearchPanel(true)">
       <img src="../images/search.png" alt="" width="25">
       <span>三层纸巾</span>
     </a>
@@ -10,7 +10,10 @@
 <script>
 
     export default {
-        name: "SearchNav"
+        name: "SearchNav",
+        props:{
+          isShowSearchPanel:Function
+        }
     }
 </script>
 

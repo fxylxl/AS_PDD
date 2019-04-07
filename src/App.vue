@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-     <router-view></router-view>
-    <tab-bar></tab-bar>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+    <tab-bar v-show="$route.meta.showBottomTabBar"></tab-bar>
   </div>
 </template>
 
@@ -9,6 +11,9 @@
   import TabBar from './components/TabBar/TabBar.vue'
 export default {
   name: 'App',
+  created(){
+    this.$store.dispatch('getUserInfo')
+  },
   components:{
     TabBar
   }

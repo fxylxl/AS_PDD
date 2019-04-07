@@ -1,11 +1,11 @@
 <template>
-  <a class="recommend-item" >
-    <img :src="item.thumb_url" alt="" width="100%" v-if="item.thumb_url">
+  <a class="recommend-item"  >
+    <img v-lazy="item.thumb_url" alt="" width="100%" v-if="item.thumb_url">
     <h4 class="item-title">{{item.short_name}}</h4>
     <div class="item-bottom">
       <span class="item-price">¥{{item.price / 100 }}</span>
       <span class="item-sales">{{item.sales_tip}}</span>
-      <button class="item-btn">找相关</button>
+      <button class="item-btn"  @click="clickCellBtn(item)">加入购物车</button>
     </div>
   </a>
 </template>
@@ -14,7 +14,11 @@
     export default {
         name: "ShopList",
         props:{
-          item:Object
+          item:Object,
+          clickCellBtn:{
+            type:Function,
+            default:()=>{}
+          }
         }
     }
 </script>
@@ -34,7 +38,7 @@
       height: 20px
       overflow: hidden
       margin:5px 0
-      padding:0 5px
+      padding:0 6px
     .item-bottom
       display: flex
       flex-direction:row
@@ -47,10 +51,10 @@
         font-size:12px
       .item-sales
         flex 4
-        font-size: 10px
+        font-size: 8px
         color: #666
       .item-btn
-        flex 2
+        flex 4
         border:1px solid orange
         height: 26px
         -webkit-border-radius: 5px
@@ -58,5 +62,5 @@
         border-radius: 5px
         background: transparent
         color:red
-        font-size:10px
+        font-size:8px
 </style>

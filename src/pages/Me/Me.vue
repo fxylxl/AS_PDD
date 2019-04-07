@@ -1,16 +1,31 @@
 <template>
-<div class="me">个人中心</div>
+  <div class="me">
+    <div v-if="userInfo.id ">
+      <me-top></me-top>
+    </div>
+    <select-login v-else ></select-login>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "Me"
+  import SelectLogin from './../Login/SelectLogin.vue'
+  import MeTop from './MeTop.vue'
+  import {mapState} from 'vuex';
+  export default {
+    name: "Me",
+    components: {
+      SelectLogin,
+      MeTop
+    },
+    computed:{
+      ...mapState(['userInfo'])
     }
+  }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   .me
-    background: purple
+    background: #F5F5F5
     width: 100%
     height: 100%
 </style>

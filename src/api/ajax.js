@@ -5,7 +5,7 @@ export  default function ajax(url = '', params = {}, type="GET") {
   let promise;
   return new Promise((resolve,reject)=>{
     //2.判断请求方式
-    if('GET === type'){
+    if('GET' === type){
         //2.1拼接字符串
         let paramsStr = '';
         Object.keys(params).forEach(key=>{
@@ -16,10 +16,10 @@ export  default function ajax(url = '', params = {}, type="GET") {
           paramsStr = paramsStr.substr(0,paramsStr.lastIndexOf('&'))
         }
         //2.3 完整路径
-          url += '?' + paramsStr
+          url += '?' + paramsStr;
         //2.4  发送GET请求
           promise = axios.get(url)
-    }else if('POST === type'){
+    }else if('POST' === type){
           promise = axios.post(url,params)
     }
 

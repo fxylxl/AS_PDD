@@ -1,6 +1,8 @@
 <template>
 <div class="search">
-  <search-nav></search-nav>
+  <!--搜索导航-->
+  <search-nav :isShowSearchPanel="isShowSearchPanel"></search-nav>
+  <!--联动列表-->
   <div class="shop">
     <!-- 左边-->
     <div class=" menu-wrapper ">
@@ -10,6 +12,7 @@
             :key="index"
             :class="{current : index === currentIndex}"
             v-on:click="clickLeftItem(index)"
+            ref="menulist"
         >
           <span>{{sort.sort_name}}</span>
         </li>
@@ -25,7 +28,7 @@
           </div>
           <ul class="shops-items">
             <li v-for="(goods,index3) in searchgoods" :key="index3" v-if="sort.sort_name == goods.name">
-              <img :src="goods.icon" alt="">
+              <img v-lazy="goods.icon" alt="">
               <span>{{goods.title}}</span>
             </li>
           </ul>
@@ -33,15 +36,16 @@
       </ul>
     </div>
   </div>
+   <!--搜索面板-->
+  <search-panel v-if="isShow" :isShowSearchPanel="isShowSearchPanel"></search-panel>
 </div>
 </template>
 
 <script>
     import BScroll from 'better-scroll'
-
-
     import {mapState} from 'vuex'
     import SearchNav from './children/SearchNav.vue'
+    import SearchPanel from './children/SearchPanel.vue'
     export default {
         name: "Search",
 
@@ -49,11 +53,14 @@
           return{
             scrollY:0,//右侧列表滑动的坐标（实时更新）
             rightLiTops:[], //所有分类的头部位置
+            isShow:false,//设置搜索面板的显示
           }
         },
         components:{
-          SearchNav
+          SearchNav,
+          SearchPanel
         },
+
         computed:{
           ...mapState(['searchgoods']),
           ...mapState(['searchsort']),
@@ -63,6 +70,7 @@
             const {scrollY,rightLiTops} = this;
             //1.2 取出索引
             return rightLiTops.findIndex((liTops,index)=>{
+              this._leftScroll(index);
               return scrollY >= liTops && scrollY < rightLiTops[index + 1];
 
             })
@@ -87,14 +95,13 @@
         methods:{
           //1.1初始化
           _initBScroll(){
-            let leftScroll = new BScroll('.menu-wrapper',{});
+            this.leftScroll = new BScroll('.menu-wrapper',{});
             this.rightScroll = new BScroll('.shop-wrapper',{
               probeType: 3
             });
             //监听右侧的滑动事件
             this.rightScroll.on('scroll',(pos)=> {
               this.scrollY = Math.abs(pos.y);
-              console.log(this.scrollY);
             })
 
           },
@@ -116,6 +123,22 @@
             this.rightLiTops = tempArr;
 
           },
+          //1.3 点击切换
+          clickLeftItem(index){
+            this.scrollY = this.rightLiTops[index];
+            this.rightScroll.scrollTo(0,-this.scrollY,300)
+          },
+          //1.4左侧联动
+          _leftScroll(index){
+            let menulists = this.$refs.menulist;
+            let el=menulists[index];
+            this.leftScroll.scrollToElement(el,300,0,-100)
+          },
+          //1.5设置搜索面板设置
+          isShowSearchPanel(flag){
+            this.isShow = flag;
+          }
+
         },
 
     }
@@ -184,7 +207,7 @@
             height: 90px
             justify-content: center
             align-items: center
-            color: #666
+            color: #000
             font-size: 14px
             font-weight: lighter
             img

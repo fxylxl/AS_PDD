@@ -8,5 +8,12 @@ export default {
   //推荐商品列表
   recommendshoplist:[],
   //搜索商品类别
-  searchsort:[]
+  searchsort:[],
+  //搜索商品
+  searchgoods:[],
+  //用户数据
+  userInfo:{},
+  //购物车数据
+  cartgoods:[]
+
 }
